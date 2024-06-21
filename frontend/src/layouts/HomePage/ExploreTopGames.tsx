@@ -1,0 +1,20 @@
+export const ExploreTopGames = () => {
+    return(
+        <div className="p-5 mb-4 bg-dark header">
+            <div className="container-fluid py-5 text-white 
+                d-flex justify-content-center align-items-center">
+                <div>
+                    <h1 className="display-5 fw-bold">
+                        Find your next adventure
+                    </h1>
+                    <p className="col-md fs-4">
+                        Where would you like to go next?
+                    </p>
+                    <a href="" className="btn main-color btn-lg text-white" type="button">
+                        Explore top games
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+}
