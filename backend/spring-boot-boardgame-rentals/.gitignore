@@ -34,3 +34,6 @@ build/
 
 # env file
 .env
+
+# ignore application-dev.properties
+src/main/resources/application-dev.properties
