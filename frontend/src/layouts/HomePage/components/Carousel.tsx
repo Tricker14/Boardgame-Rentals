@@ -1,6 +1,65 @@
-import { ReturnGame } from "./ReturnGame";
+import { useEffect, useState } from "react";
+import { ReturnBoardGame } from "./ReturnBoardGame";
+import BoardGameModel from "../../../models/BoardGameModel";
+import axios from "axios";
 
 export const Carousel = () => {
+    const [boardGames, setBoardGames] = useState<BoardGameModel[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [httpError, setHttpError] = useState(null);
+
+    useEffect(() => {
+        const fetchBoardGames = async () => {
+            try {
+                const url: string = "http://localhost:8080/api/boardGames?page=0&size=9";
+                const response = await axios.get(url);
+    
+                if (response.status !== 200) {
+                    throw new Error('Something went wrong!');
+                }
+    
+                const data = response.data._embedded.books;
+
+                const loadedBoardGames: BoardGameModel[] = [];
+                for(let key in data){
+                    loadedBoardGames.push({
+                        id: data[key].id,
+                        title: data[key].title,
+                        designer: data[key].designer,
+                        description: data[key].description,
+                        copies: data[key].copies,
+                        copiesAvailable: data[key].copiesAvailable,
+                        category: data[key].category,
+                        imageURL: data[key].imageURL,
+                    });
+                }
+
+                setBoardGames(loadedBoardGames);
+                setIsLoading(false);
+            }
+            catch(error: any) {
+                setIsLoading(false);
+                setHttpError(error.message);
+            }
+        };
+    }, []);
+
+    if(isLoading){
+        return(
+            <div className="container m-5">
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
+    if(httpError){
+        return(
+            <div className="container m-5">
+                <p>{httpError}</p>
+            </div>
+        )
+    }
+
     return (
         <div className="container mt-5" style={{ height: 550 }}>
             <div className="homepage-carousel-title">
@@ -14,25 +73,25 @@ export const Carousel = () => {
                 <div className="carousel-inner">
                     <div className="carousel-item active">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnGame/>
-                            <ReturnGame/>
-                            <ReturnGame/>
+                            <ReturnBoardGame/>
+                            <ReturnBoardGame/>
+                            <ReturnBoardGame/>
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnGame/>
-                            <ReturnGame/>
-                            <ReturnGame/>
+                            <ReturnBoardGame/>
+                            <ReturnBoardGame/>
+                            <ReturnBoardGame/>
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnGame/>
-                            <ReturnGame/>
-                            <ReturnGame/>
+                            <ReturnBoardGame/>
+                            <ReturnBoardGame/>
+                            <ReturnBoardGame/>
                         </div>
                     </div>
                 </div>
@@ -52,7 +111,7 @@ export const Carousel = () => {
             {/* Mobile */}
             <div className="d-lg-none mt-3">
                 <div className="row d-flex justify-content-center align-items-center">
-                    <ReturnGame/>
+                    <ReturnBoardGame/>
                 </div>
             </div>
 
