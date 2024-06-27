@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ReturnBoardGame } from "./ReturnBoardGame";
 import BoardGameModel from "../../../models/BoardGameModel";
 import axios from "axios";
+import { SpinnerLoading } from "../../Utils/SpinnerLoading";
 
 export const Carousel = () => {
     const [boardGames, setBoardGames] = useState<BoardGameModel[]>([]);
@@ -18,7 +19,7 @@ export const Carousel = () => {
                     throw new Error('Something went wrong!');
                 }
     
-                const data = response.data._embedded.books;
+                const data = response.data._embedded.boardGames;
 
                 const loadedBoardGames: BoardGameModel[] = [];
                 for(let key in data){
@@ -42,13 +43,13 @@ export const Carousel = () => {
                 setHttpError(error.message);
             }
         };
+
+        fetchBoardGames();
     }, []);
 
     if(isLoading){
         return(
-            <div className="container m-5">
-                <p>Loading...</p>
-            </div>
+            <SpinnerLoading/>
         )
     }
 
@@ -73,25 +74,25 @@ export const Carousel = () => {
                 <div className="carousel-inner">
                     <div className="carousel-item active">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBoardGame/>
-                            <ReturnBoardGame/>
-                            <ReturnBoardGame/>
+                            {boardGames.slice(0, 3).map((boardGame) => (
+                                <ReturnBoardGame boardGame={boardGame} key={boardGame.id}/>
+                            ))}
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBoardGame/>
-                            <ReturnBoardGame/>
-                            <ReturnBoardGame/>
+                            {boardGames.slice(3, 6).map((boardGame) => (
+                                <ReturnBoardGame boardGame={boardGame} key={boardGame.id}/>
+                            ))}
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBoardGame/>
-                            <ReturnBoardGame/>
-                            <ReturnBoardGame/>
+                            {boardGames.slice(6, 9).map((boardGame) => (
+                                <ReturnBoardGame boardGame={boardGame} key={boardGame.id}/>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -111,7 +112,7 @@ export const Carousel = () => {
             {/* Mobile */}
             <div className="d-lg-none mt-3">
                 <div className="row d-flex justify-content-center align-items-center">
-                    <ReturnBoardGame/>
+                    <ReturnBoardGame boardGame={boardGames[7]} key={boardGames[7].id}/>
                 </div>
             </div>
 
