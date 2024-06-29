@@ -3,16 +3,21 @@ import BoardGameModel from "../../models/BoardGameModel";
 import axios from "axios";
 import { SpinnerLoading } from "../Utils/SpinnerLoading";
 import { SearchBoardGames } from "./components/SearchBoardGames";
+import { Pagination } from "../Utils/Pagination";
 
 export const SearchBoardGamesPage = () => {
     const [boardGames, setBoardGames] = useState<BoardGameModel[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [boardGamesPerPage] = useState(5);
+    const [totalBoardGames, setTotalBoardGames] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
         const fetchBoardGames = async () => {
             try {
-                const url: string = "http://localhost:8080/api/boardGames?page=0&size=5";
+                const url: string = `http://localhost:8080/api/boardGames?page=${currentPage - 1}&size=${boardGamesPerPage}`;
                 const response = await axios.get(url);
     
                 if (response.status !== 200) {
@@ -20,6 +25,9 @@ export const SearchBoardGamesPage = () => {
                 }
     
                 const data = response.data._embedded.boardGames;
+
+                setTotalBoardGames(response.data.page.totalElements);
+                setTotalPages(response.data.page.totalPages);
 
                 const loadedBoardGames: BoardGameModel[] = [];
                 for(let key in data){
@@ -45,7 +53,8 @@ export const SearchBoardGamesPage = () => {
         };
 
         fetchBoardGames();
-    }, []);
+        window.scrollTo(0, 0);
+    }, [currentPage]);
 
     if(isLoading){
         return(
@@ -60,6 +69,13 @@ export const SearchBoardGamesPage = () => {
             </div>
         )
     }
+
+    const indexLastBoardGame: number = currentPage * boardGamesPerPage;
+    const indexFirstBoardGame: number = indexLastBoardGame - boardGamesPerPage;
+    let lastItem = currentPage * boardGamesPerPage <= totalBoardGames ? currentPage * boardGamesPerPage : totalBoardGames;
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
     return(
         <div className="container">
             <div>
@@ -99,14 +115,17 @@ export const SearchBoardGamesPage = () => {
                         </div>
                     </div>
                     <div className="mt-3">
-                        <h5>Number of results: {9}</h5>
+                        <h5>Number of results: {totalBoardGames}</h5>
                     </div>
                     <p>
-                        1 to 5 of 9 items
+                        {indexFirstBoardGame + 1} to {lastItem} of {totalBoardGames} items
                     </p>
                     {boardGames.map(boardGame => (
                         <SearchBoardGames boardGame={boardGame} key={boardGame.id}/>
                     ))}
+                    {totalPages > 1 &&
+                        <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate}/>
+                    }
                 </div>
             </div>
         </div>
