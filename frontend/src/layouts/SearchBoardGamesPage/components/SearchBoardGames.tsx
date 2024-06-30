@@ -39,11 +39,11 @@ export const SearchBoardGames: React.FC<{ boardGame: BoardGameModel }> = (props)
                 </div>
                 <div className="col-md-6">
                     <div className="card-body">
-                        <h5 className="card-title">
+                        <h5 className="card-name">
                             {props.boardGame.designer}
                         </h5>
                         <h4>
-                            {props.boardGame.title}
+                            {props.boardGame.name}
                         </h4>
                         <p className="card-text">
                             {props.boardGame.description}

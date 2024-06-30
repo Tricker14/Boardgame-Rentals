@@ -25,7 +25,7 @@ export const Carousel = () => {
                 for(let key in data){
                     loadedBoardGames.push({
                         id: data[key].id,
-                        title: data[key].title,
+                        name: data[key].name,
                         designer: data[key].designer,
                         description: data[key].description,
                         copies: data[key].copies,
@@ -63,7 +63,7 @@ export const Carousel = () => {
 
     return (
         <div className="container mt-5" style={{ height: 550 }}>
-            <div className="homepage-carousel-title">
+            <div className="homepage-carousel-name">
                 <h3>Find your next board games.</h3>
             </div>
 
@@ -116,7 +116,7 @@ export const Carousel = () => {
                 </div>
             </div>
 
-            <div className="homepage-carousel-title mt-3">
+            <div className="homepage-carousel-name mt-3">
                 <a href="#" className="btn btn-outline-secondary btn-lg">View More</a>
             </div>
         </div>

@@ -21,7 +21,7 @@ export const ReturnBoardGame: React.FC<{boardGame: BoardGameModel}> = (props) =>
                         alt="game"
                     />
                 }
-                <h6 className="mt-2">{props.boardGame.title}</h6>
+                <h6 className="mt-2">{props.boardGame.name}</h6>
                 <p>{props.boardGame.designer}</p>
                 <a href="#" className="btn main-color text-white">Reserve</a>
             </div>
